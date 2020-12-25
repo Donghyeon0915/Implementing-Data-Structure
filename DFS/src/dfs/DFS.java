@@ -16,7 +16,7 @@ public class DFS {
     /**
      * @param args the command line arguments
      */
-    Graph graph = new Graph(9);            // 0 ~ 9까지의 데이터로 노드가 초기화 됨
+    Graph graph;           // 0 ~ 9까지의 데이터로 노드가 초기화 됨
 
     public DFS(Graph graph) {
         this.graph = graph;
@@ -36,15 +36,14 @@ public class DFS {
         while(!stack.isEmpty()){
             Node now = stack.pop();
             
-            for (Node n : now.adjacent) {
-                if(!n.visited){
-                    stack.push(n);
-                    n.visited = true;
-                }
-            }
+            now.adjacent.stream().filter(n -> (!n.visited)).map(n -> {          //연결된 노드 중 방문하지 않은 노드만 스택에 삽입
+                stack.push(n);                                                  //현재 방문한 노드와 연결된 노드들을 스택에 삽입
+                return n;
+            }).forEachOrdered(n -> {                                            //방문 체크
+                n.visited = true;
+            });
             
             System.out.print(now.data +  " ");
         }
-        
     }    
 }
